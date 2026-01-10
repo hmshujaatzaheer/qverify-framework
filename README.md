@@ -1,15 +1,10 @@
 # QVERIFY: LLM-Assisted Formal Verification of Quantum Programs
 
 <p align="center">
-  <img src="docs/images/qverify_logo.png" alt="QVERIFY Logo" width="400"/>
-</p>
-
-<p align="center">
   <a href="https://github.com/hmshujaatzaheer/qverify-framework/actions"><img src="https://img.shields.io/github/actions/workflow/status/hmshujaatzaheer/qverify-framework/ci.yml?branch=main&style=flat-square" alt="Build Status"></a>
   <a href="https://github.com/hmshujaatzaheer/qverify-framework/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="License"></a>
   <a href="https://python.org"><img src="https://img.shields.io/badge/python-3.10+-blue.svg?style=flat-square" alt="Python"></a>
   <a href="https://github.com/hmshujaatzaheer/qverify-framework/releases"><img src="https://img.shields.io/github/v/release/hmshujaatzaheer/qverify-framework?style=flat-square" alt="Release"></a>
-  <a href="https://arxiv.org/abs/xxxx.xxxxx"><img src="https://img.shields.io/badge/arXiv-xxxx.xxxxx-b31b1b.svg?style=flat-square" alt="arXiv"></a>
 </p>
 
 <p align="center">
@@ -18,7 +13,7 @@
 
 ---
 
-## 🎯 Overview
+## Overview
 
 **QVERIFY** is the first framework that integrates Large Language Model (LLM) reasoning capabilities with formal verification of quantum programs. As LLMs increasingly generate quantum circuits (achieving 78%+ accuracy on quantum programming tasks), the need for formal correctness guarantees becomes critical.
 
@@ -27,30 +22,16 @@ QVERIFY addresses three key challenges:
 2. **Verification Integration**: Connect LLM-synthesized specs with SMT-based quantum verification
 3. **Benchmark Evaluation**: Evaluate LLM capabilities on quantum program verification tasks
 
-```
-┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
-│  Quantum        │     │  QuantumSpecSynth │     │  NeuralSilVer   │
-│  Program        │────▶│  (LLM Module)     │────▶│  (Verification) │
-│  (Silq/QASM)    │     │                   │     │                 │
-└─────────────────┘     └──────────────────┘     └─────────────────┘
-                                │                        │
-                                ▼                        ▼
-                        ┌──────────────────┐     ┌─────────────────┐
-                        │  Specification   │     │  Verification   │
-                        │  (Pre, Post, Inv)│     │  Result         │
-                        └──────────────────┘     └─────────────────┘
-```
+## Key Features
 
-## ✨ Key Features
+- **QuantumSpecSynth**: LLM-guided specification synthesis with quantum-aware prompting
+- **NeuralSilVer**: Integrated verification combining LLM reasoning with SMT solving
+- **QVerifyBench**: 500+ quantum programs benchmark with ground-truth specifications
+- **CEGIS Loop**: Counterexample-guided specification refinement
+- **Multi-LLM Support**: Claude, GPT-4, Llama, and custom fine-tuned models
+- **Quantum Simulation**: Integration with qblaze for execution testing
 
-- **🧠 QuantumSpecSynth**: LLM-guided specification synthesis with quantum-aware prompting
-- **🔍 NeuralSilVer**: Integrated verification combining LLM reasoning with SMT solving
-- **📊 QVerifyBench**: 500+ quantum programs benchmark with ground-truth specifications
-- **🔄 CEGIS Loop**: Counterexample-guided specification refinement
-- **🌐 Multi-LLM Support**: Claude, GPT-4, Llama, and custom fine-tuned models
-- **⚡ Quantum Simulation**: Integration with qblaze for execution testing
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
@@ -81,7 +62,7 @@ qv = QVerify(llm="claude-3.5-sonnet", backend="z3")
 
 # Load a quantum program
 program = QuantumProgram.from_silq("""
-def grover_iteration(qubits: ![]quon, oracle: []quon -> []quotn) {
+def grover_iteration(qubits: qubit[], oracle: qubit[] -> qubit[]) {
     // Grover diffusion operator
     qubits = hadamard(qubits);
     qubits = oracle(qubits);
@@ -121,76 +102,25 @@ print(f"Verification Success Rate: {results.verification_rate:.2%}")
 print(f"Average Time: {results.avg_time:.2f}s")
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 qverify-framework/
-├── src/
-│   ├── qverify/
-│   │   ├── __init__.py           # Main package exports
-│   │   ├── core/
-│   │   │   ├── __init__.py
-│   │   │   ├── quantum_program.py    # Quantum program representation
-│   │   │   ├── specification.py      # Specification data structures
-│   │   │   ├── quantum_state.py      # Quantum state predicates
-│   │   │   └── types.py              # Type definitions
-│   │   ├── algorithms/
-│   │   │   ├── __init__.py
-│   │   │   ├── spec_synth.py         # QuantumSpecSynth algorithm
-│   │   │   ├── predicate_learning.py # Quantum predicate learning
-│   │   │   ├── invariant_synth.py    # Loop invariant synthesis
-│   │   │   └── spec_repair.py        # Counterexample-guided repair
-│   │   ├── verification/
-│   │   │   ├── __init__.py
-│   │   │   ├── neural_silver.py      # NeuralSilVer verifier
-│   │   │   ├── vc_generator.py       # Verification condition generation
-│   │   │   ├── smt_interface.py      # SMT solver interface
-│   │   │   └── counterexample.py     # Counterexample analysis
-│   │   ├── benchmark/
-│   │   │   ├── __init__.py
-│   │   │   ├── qverifybench.py       # Benchmark framework
-│   │   │   ├── metrics.py            # Evaluation metrics
-│   │   │   └── programs/             # Benchmark programs
-│   │   └── utils/
-│   │       ├── __init__.py
-│   │       ├── llm_interface.py      # LLM API interfaces
-│   │       ├── parsers.py            # Silq/QASM parsers
-│   │       └── logging.py            # Logging utilities
-├── tests/
-│   ├── unit/                         # Unit tests
-│   ├── integration/                  # Integration tests
-│   └── conftest.py                   # Test fixtures
-├── data/
-│   ├── benchmarks/                   # QVerifyBench programs
-│   ├── specifications/               # Ground-truth specifications
-│   └── examples/                     # Example programs
-├── docs/
-│   ├── api/                          # API documentation
-│   ├── tutorials/                    # Tutorial notebooks
-│   └── images/                       # Documentation images
-├── configs/
-│   ├── default.yaml                  # Default configuration
-│   └── llm_configs/                  # LLM-specific configs
-├── scripts/
-│   ├── run_benchmark.py              # Benchmark runner
-│   ├── evaluate_llm.py               # LLM evaluation script
-│   └── generate_specs.py             # Batch specification generation
-├── notebooks/
-│   ├── 01_getting_started.ipynb      # Introduction tutorial
-│   ├── 02_specification_synthesis.ipynb
-│   └── 03_verification_deep_dive.ipynb
-├── .github/
-│   └── workflows/
-│       └── ci.yml                    # CI/CD pipeline
-├── pyproject.toml                    # Project configuration
-├── requirements.txt                  # Dependencies
-├── LICENSE                           # MIT License
-├── CONTRIBUTING.md                   # Contribution guidelines
-├── CHANGELOG.md                      # Version history
-└── README.md                         # This file
+├── src/qverify/
+│   ├── core/                 # Core data structures
+│   ├── algorithms/           # Synthesis algorithms
+│   ├── verification/         # Verification engine
+│   ├── benchmark/            # QVerifyBench
+│   └── utils/                # Utilities
+├── tests/                    # Test suite
+├── data/                     # Benchmark data
+├── docs/                     # Documentation
+├── configs/                  # Configuration files
+├── scripts/                  # Utility scripts
+└── notebooks/                # Tutorial notebooks
 ```
 
-## 🔬 Core Algorithms
+## Core Algorithms
 
 ### 1. QuantumSpecSynth
 
@@ -261,7 +191,7 @@ verifier = NeuralSilVer(
 result = verifier.verify(program, specification)
 ```
 
-## 📊 QVerifyBench
+## QVerifyBench
 
 A comprehensive benchmark for quantum program verification:
 
@@ -281,7 +211,7 @@ A comprehensive benchmark for quantum program verification:
 | Claude-3.5 | 88% | 75% | 62% | 38% | 16% | 55.8% |
 | Llama-3-70B | 78% | 65% | 48% | 28% | 8% | 45.4% |
 
-## 🛠️ Configuration
+## Configuration
 
 ### Default Configuration (configs/default.yaml)
 
@@ -320,7 +250,7 @@ QVERIFY_LOG_LEVEL=INFO
 QVERIFY_CACHE_DIR=~/.qverify/cache
 ```
 
-## 📖 Documentation
+## Documentation
 
 - **[API Reference](docs/api/)**: Complete API documentation
 - **[Tutorials](docs/tutorials/)**: Step-by-step guides
@@ -332,7 +262,7 @@ QVERIFY_CACHE_DIR=~/.qverify/cache
 2. [Specification Synthesis Deep Dive](notebooks/02_specification_synthesis.ipynb)
 3. [Verification Techniques](notebooks/03_verification_deep_dive.ipynb)
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run all tests
@@ -345,7 +275,7 @@ pytest --cov=qverify --cov-report=html
 pytest tests/unit/test_spec_synth.py -v
 ```
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
@@ -363,7 +293,7 @@ ruff check src/
 mypy src/
 ```
 
-## 📄 Citation
+## Citation
 
 If you use QVERIFY in your research, please cite:
 
@@ -371,21 +301,20 @@ If you use QVERIFY in your research, please cite:
 @article{zaheer2026qverify,
   title={QVERIFY: LLM-Assisted Formal Verification of Quantum Programs},
   author={Zaheer, H M Shujaat},
-  journal={arXiv preprint arXiv:xxxx.xxxxx},
   year={2026}
 }
 ```
 
-## 📜 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - This work builds on concepts from formal verification, quantum programming languages, and large language models
 - Thanks to the open-source quantum computing community for foundational tools
 
-## 📬 Contact
+## Contact
 
 - **Author**: H M Shujaat Zaheer
 - **Email**: shujabis@gmail.com

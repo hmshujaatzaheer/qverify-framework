@@ -6,18 +6,17 @@ This module provides utility functions and classes used throughout the framework
 
 from qverify.utils.llm_interface import (
     LLMConfig,
-    LLMInterface,
+    BaseLLMInterface,
     AnthropicInterface,
     OpenAIInterface,
     MockLLMInterface,
     create_llm_interface,
-    get_default_llm,
+    get_default_interface,
 )
 from qverify.utils.parsers import (
     Token,
     TokenType,
     Lexer,
-    Parser,
     SilqParser,
     OpenQASMParser,
     parse_silq,
@@ -35,20 +34,25 @@ from qverify.utils.logging import (
     default_logger,
 )
 
+# Aliases for backward compatibility
+LLMInterface = BaseLLMInterface
+get_default_llm = get_default_interface
+
 __all__ = [
     # LLM Interface
     "LLMConfig",
-    "LLMInterface",
+    "BaseLLMInterface",
+    "LLMInterface",  # Alias
     "AnthropicInterface",
     "OpenAIInterface",
     "MockLLMInterface",
     "create_llm_interface",
-    "get_default_llm",
+    "get_default_interface",
+    "get_default_llm",  # Alias
     # Parsers
     "Token",
     "TokenType",
     "Lexer",
-    "Parser",
     "SilqParser",
     "OpenQASMParser",
     "parse_silq",
