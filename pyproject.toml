@@ -1,0 +1,205 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qverify"
+version = "0.1.0"
+description = "LLM-Assisted Formal Verification of Quantum Programs"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "H M Shujaat Zaheer", email = "shujabis@gmail.com"}
+]
+maintainers = [
+    {name = "H M Shujaat Zaheer", email = "shujabis@gmail.com"}
+]
+keywords = [
+    "quantum computing",
+    "formal verification",
+    "large language models",
+    "specification synthesis",
+    "SMT solving",
+    "quantum programs",
+    "LLM",
+    "verification",
+    "silq",
+    "openqasm"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+    "Typing :: Typed",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "sympy>=1.12",
+    "networkx>=3.0",
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0",
+    "click>=8.1.0",
+    "rich>=13.0.0",
+    "httpx>=0.24.0",
+    "tenacity>=8.2.0",
+    "python-dotenv>=1.0.0",
+    "anthropic>=0.18.0",
+    "openai>=1.0.0",
+    "z3-solver>=4.12.0",
+    "qiskit>=1.0.0",
+    "lark>=1.1.0",
+    "jinja2>=3.1.0",
+    "tqdm>=4.65.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-mock>=3.11.0",
+    "mypy>=1.5.0",
+    "ruff>=0.1.0",
+    "black>=23.9.0",
+    "isort>=5.12.0",
+    "pre-commit>=3.4.0",
+    "sphinx>=7.0.0",
+    "sphinx-rtd-theme>=1.3.0",
+    "myst-parser>=2.0.0",
+    "jupyter>=1.0.0",
+    "ipykernel>=6.25.0",
+]
+docs = [
+    "sphinx>=7.0.0",
+    "sphinx-rtd-theme>=1.3.0",
+    "myst-parser>=2.0.0",
+    "sphinx-autodoc-typehints>=1.24.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/hmshujaatzaheer/qverify-framework"
+Documentation = "https://github.com/hmshujaatzaheer/qverify-framework#readme"
+Repository = "https://github.com/hmshujaatzaheer/qverify-framework.git"
+Issues = "https://github.com/hmshujaatzaheer/qverify-framework/issues"
+Changelog = "https://github.com/hmshujaatzaheer/qverify-framework/blob/main/CHANGELOG.md"
+
+[project.scripts]
+qverify = "qverify.cli:main"
+qverify-bench = "qverify.benchmark.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+qverify = ["py.typed", "data/**/*", "configs/**/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["src/qverify"]
+branch = true
+omit = ["*/tests/*", "*/__pycache__/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_return_any = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_configs = true
+show_error_codes = true
+show_column_numbers = true
+pretty = true
+
+[[tool.mypy.overrides]]
+module = [
+    "z3.*",
+    "qiskit.*",
+    "anthropic.*",
+    "openai.*",
+    "lark.*",
+]
+ignore_missing_imports = true
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # Pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "ARG", # flake8-unused-arguments
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "E501",   # line too long (handled by black)
+    "B008",   # do not perform function calls in argument defaults
+    "C901",   # too complex
+    "ARG001", # unused function argument
+]
+
+[tool.ruff.per-file-ignores]
+"tests/*" = ["ARG", "S101"]
+"__init__.py" = ["F401"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+known_first_party = ["qverify"]
+skip_gitignore = true

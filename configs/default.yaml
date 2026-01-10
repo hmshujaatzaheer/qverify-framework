@@ -1,0 +1,92 @@
+# QVERIFY Configuration
+# Default settings for the QVERIFY framework
+
+qverify:
+  # LLM Configuration
+  llm:
+    # Provider: "anthropic", "openai", or "mock"
+    provider: "anthropic"
+    
+    # Model identifier
+    # Anthropic: "claude-3-5-sonnet-20241022", "claude-3-opus-20240229"
+    # OpenAI: "gpt-4o", "gpt-4-turbo"
+    model: "claude-3-5-sonnet-20241022"
+    
+    # Temperature for generation (0.0-1.0)
+    # Lower = more deterministic, Higher = more creative
+    temperature: 0.2
+    
+    # Maximum tokens for LLM responses
+    max_tokens: 4096
+  
+  # Verification Configuration
+  verification:
+    # SMT solver: "z3" or "mock"
+    solver: "z3"
+    
+    # Timeout for SMT queries (seconds)
+    timeout: 30
+    
+    # Enable LLM-assisted lemma hints for stuck VCs
+    enable_lemma_hints: true
+    
+    # Maximum lemma hint attempts per VC
+    max_lemma_attempts: 3
+  
+  # Specification Synthesis Configuration
+  synthesis:
+    # Maximum candidate specifications to generate
+    max_candidates: 5
+    
+    # Maximum CEGIS refinement iterations
+    refinement_iterations: 3
+    
+    # Enable quantum-aware prompting
+    quantum_aware_prompting: true
+    
+    # Enable type-guided synthesis
+    type_guidance: true
+  
+  # Benchmark Configuration
+  benchmark:
+    # Default benchmark tier (T1-T5 or null for all)
+    default_tier: null
+    
+    # Timeout per program (seconds)
+    timeout_per_program: 60
+    
+    # Save intermediate results
+    save_intermediate: true
+    
+    # Output format: "json", "csv", or "markdown"
+    output_format: "json"
+  
+  # Logging Configuration
+  logging:
+    # Log level: "DEBUG", "INFO", "WARNING", "ERROR"
+    level: "INFO"
+    
+    # Log format
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+    # Log to file (null to disable)
+    file: null
+  
+  # Cache Configuration
+  cache:
+    # Enable caching of LLM responses
+    enabled: true
+    
+    # Cache directory (null for default)
+    directory: null
+    
+    # Cache TTL in seconds (null for no expiration)
+    ttl: null
+
+# Environment-specific overrides
+# These can be set via environment variables:
+# - QVERIFY_LLM_MODEL
+# - QVERIFY_LLM_PROVIDER
+# - QVERIFY_VERIFICATION_TIMEOUT
+# - ANTHROPIC_API_KEY
+# - OPENAI_API_KEY

@@ -1,0 +1,52 @@
+# Anthropic Claude LLM Configuration
+
+anthropic:
+  # Available models
+  models:
+    claude-3.5-sonnet:
+      model_id: "claude-3-5-sonnet-20241022"
+      max_tokens: 4096
+      default_temperature: 0.2
+      supports_json_mode: true
+      context_window: 200000
+      
+    claude-3-opus:
+      model_id: "claude-3-opus-20240229"
+      max_tokens: 4096
+      default_temperature: 0.2
+      supports_json_mode: true
+      context_window: 200000
+      
+    claude-3-haiku:
+      model_id: "claude-3-haiku-20240307"
+      max_tokens: 4096
+      default_temperature: 0.2
+      supports_json_mode: true
+      context_window: 200000
+  
+  # Default settings
+  defaults:
+    model: "claude-3.5-sonnet"
+    temperature: 0.2
+    max_tokens: 4096
+    retry_attempts: 3
+    retry_delay: 1.0
+  
+  # Rate limiting
+  rate_limits:
+    requests_per_minute: 60
+    tokens_per_minute: 100000
+  
+  # Prompt templates
+  prompts:
+    spec_synthesis:
+      temperature: 0.2
+      max_tokens: 2048
+    
+    predicate_learning:
+      temperature: 0.3
+      max_tokens: 1024
+    
+    lemma_hint:
+      temperature: 0.4
+      max_tokens: 512

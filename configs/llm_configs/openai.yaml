@@ -1,0 +1,48 @@
+# OpenAI GPT LLM Configuration
+
+openai:
+  # Available models
+  models:
+    gpt-4o:
+      model_id: "gpt-4o"
+      max_tokens: 4096
+      default_temperature: 0.2
+      supports_json_mode: true
+      context_window: 128000
+      
+    gpt-4-turbo:
+      model_id: "gpt-4-turbo-preview"
+      max_tokens: 4096
+      default_temperature: 0.2
+      supports_json_mode: true
+      context_window: 128000
+      
+    gpt-4:
+      model_id: "gpt-4"
+      max_tokens: 4096
+      default_temperature: 0.2
+      supports_json_mode: false
+      context_window: 8192
+  
+  # Default settings
+  defaults:
+    model: "gpt-4o"
+    temperature: 0.2
+    max_tokens: 4096
+    retry_attempts: 3
+    retry_delay: 1.0
+  
+  # Rate limiting
+  rate_limits:
+    requests_per_minute: 60
+    tokens_per_minute: 150000
+  
+  # Prompt templates
+  prompts:
+    spec_synthesis:
+      temperature: 0.2
+      max_tokens: 2048
+    
+    predicate_learning:
+      temperature: 0.3
+      max_tokens: 1024

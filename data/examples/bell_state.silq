@@ -1,0 +1,19 @@
+// Bell State Preparation
+// Creates a maximally entangled Bell state |Φ+⟩ = (|00⟩ + |11⟩)/√2
+
+def bell_state(q0: qubit, q1: qubit) -> (qubit, qubit) {
+    // Apply Hadamard to first qubit
+    // This creates superposition: |0⟩ → (|0⟩ + |1⟩)/√2
+    q0 = H(q0);
+    
+    // Apply CNOT with q0 as control, q1 as target
+    // This entangles the qubits
+    (q0, q1) = CNOT(q0, q1);
+    
+    // Result: (|00⟩ + |11⟩)/√2
+    return (q0, q1);
+}
+
+// Specification:
+// Pre:  in_basis(q0, |0⟩) ∧ in_basis(q1, |0⟩)
+// Post: entangled(q0, q1) ∧ prob(q0q1, |00⟩) = 0.5 ∧ prob(q0q1, |11⟩) = 0.5

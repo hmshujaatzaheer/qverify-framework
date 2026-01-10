@@ -1,0 +1,156 @@
+{
+  "version": "1.0.0",
+  "description": "QVerifyBench benchmark programs",
+  "programs": [
+    {
+      "id": "t1_001",
+      "name": "hadamard_single",
+      "tier": "T1",
+      "source": "def hadamard_single(q: qubit) {\n    q = H(q);\n    return q;\n}",
+      "language": "silq",
+      "specification": {
+        "name": "hadamard_spec",
+        "precondition": "in_basis(q, |0⟩)",
+        "postcondition": "superposition(q)",
+        "invariants": []
+      },
+      "description": "Apply Hadamard gate to single qubit",
+      "tags": ["single-qubit", "hadamard", "superposition"]
+    },
+    {
+      "id": "t1_002",
+      "name": "pauli_x",
+      "tier": "T1",
+      "source": "def pauli_x(q: qubit) {\n    q = X(q);\n    return q;\n}",
+      "language": "silq",
+      "specification": {
+        "name": "pauli_x_spec",
+        "precondition": "in_basis(q, |0⟩)",
+        "postcondition": "in_basis(q, |1⟩)",
+        "invariants": []
+      },
+      "description": "Apply Pauli-X (NOT) gate",
+      "tags": ["single-qubit", "pauli"]
+    },
+    {
+      "id": "t1_003",
+      "name": "pauli_z",
+      "tier": "T1",
+      "source": "def pauli_z(q: qubit) {\n    q = Z(q);\n    return q;\n}",
+      "language": "silq",
+      "specification": {
+        "name": "pauli_z_spec",
+        "precondition": "in_basis(q, |+⟩)",
+        "postcondition": "in_basis(q, |-⟩)",
+        "invariants": []
+      },
+      "description": "Apply Pauli-Z gate",
+      "tags": ["single-qubit", "pauli", "phase"]
+    },
+    {
+      "id": "t2_001",
+      "name": "bell_state",
+      "tier": "T2",
+      "source": "def bell_state(q0: qubit, q1: qubit) {\n    q0 = H(q0);\n    (q0, q1) = CNOT(q0, q1);\n    return (q0, q1);\n}",
+      "language": "silq",
+      "specification": {
+        "name": "bell_spec",
+        "precondition": "in_basis(q0, |0⟩) ∧ in_basis(q1, |0⟩)",
+        "postcondition": "entangled(q0, q1)",
+        "invariants": []
+      },
+      "description": "Create Bell state (maximally entangled pair)",
+      "tags": ["two-qubit", "entanglement", "bell"]
+    },
+    {
+      "id": "t2_002",
+      "name": "swap_qubits",
+      "tier": "T2",
+      "source": "def swap_qubits(q0: qubit, q1: qubit) {\n    (q0, q1) = CNOT(q0, q1);\n    (q0, q1) = CNOT(q1, q0);\n    (q0, q1) = CNOT(q0, q1);\n    return (q0, q1);\n}",
+      "language": "silq",
+      "specification": {
+        "name": "swap_spec",
+        "precondition": "true",
+        "postcondition": "swapped(q0, q1)",
+        "invariants": []
+      },
+      "description": "Swap two qubits using CNOT gates",
+      "tags": ["two-qubit", "swap"]
+    },
+    {
+      "id": "t2_003",
+      "name": "ghz_three",
+      "tier": "T2",
+      "source": "def ghz_three(q0: qubit, q1: qubit, q2: qubit) {\n    q0 = H(q0);\n    (q0, q1) = CNOT(q0, q1);\n    (q1, q2) = CNOT(q1, q2);\n    return (q0, q1, q2);\n}",
+      "language": "silq",
+      "specification": {
+        "name": "ghz_spec",
+        "precondition": "in_basis(q0, |0⟩) ∧ in_basis(q1, |0⟩) ∧ in_basis(q2, |0⟩)",
+        "postcondition": "entangled(q0, q1) ∧ entangled(q1, q2)",
+        "invariants": []
+      },
+      "description": "Create 3-qubit GHZ state",
+      "tags": ["three-qubit", "entanglement", "ghz"]
+    },
+    {
+      "id": "t3_001",
+      "name": "grover_iteration",
+      "tier": "T3",
+      "source": "def grover_iteration(qubits: qubit[], oracle: qubit[] -> qubit[]) {\n    // Apply oracle\n    qubits = oracle(qubits);\n    // Diffusion operator\n    qubits = hadamard_all(qubits);\n    qubits = phase_flip_zero(qubits);\n    qubits = hadamard_all(qubits);\n    return qubits;\n}",
+      "language": "silq",
+      "specification": {
+        "name": "grover_iter_spec",
+        "precondition": "superposition(qubits)",
+        "postcondition": "amplified_marked(qubits)",
+        "invariants": ["prob(qubits, marked) >= prob_before(qubits, marked)"]
+      },
+      "description": "Single Grover iteration (oracle + diffusion)",
+      "tags": ["multi-qubit", "grover", "search", "oracle"]
+    },
+    {
+      "id": "t3_002",
+      "name": "quantum_teleportation",
+      "tier": "T3",
+      "source": "def teleport(psi: qubit, alice: qubit, bob: qubit) {\n    // Create Bell pair\n    alice = H(alice);\n    (alice, bob) = CNOT(alice, bob);\n    // Bell measurement\n    (psi, alice) = CNOT(psi, alice);\n    psi = H(psi);\n    // Corrections (classically controlled)\n    return (psi, alice, bob);\n}",
+      "language": "silq",
+      "specification": {
+        "name": "teleport_spec",
+        "precondition": "in_basis(alice, |0⟩) ∧ in_basis(bob, |0⟩)",
+        "postcondition": "state_transferred(psi, bob)",
+        "invariants": []
+      },
+      "description": "Quantum teleportation protocol",
+      "tags": ["three-qubit", "teleportation", "bell"]
+    },
+    {
+      "id": "t4_001",
+      "name": "bit_flip_code",
+      "tier": "T4",
+      "source": "def encode_bit_flip(q: qubit, a1: qubit, a2: qubit) {\n    (q, a1) = CNOT(q, a1);\n    (q, a2) = CNOT(q, a2);\n    return (q, a1, a2);\n}\n\ndef correct_bit_flip(q: qubit, a1: qubit, a2: qubit) {\n    // Syndrome measurement and correction\n    return (q, a1, a2);\n}",
+      "language": "silq",
+      "specification": {
+        "name": "bit_flip_spec",
+        "precondition": "in_basis(a1, |0⟩) ∧ in_basis(a2, |0⟩)",
+        "postcondition": "encoded(q, a1, a2)",
+        "invariants": []
+      },
+      "description": "3-qubit bit flip error correction code",
+      "tags": ["error-correction", "bit-flip", "encoding"]
+    },
+    {
+      "id": "t5_001",
+      "name": "vqe_ansatz",
+      "tier": "T5",
+      "source": "def vqe_layer(qubits: qubit[], params: real[]) {\n    // Parameterized rotation layer\n    for i in 0..len(qubits) {\n        qubits[i] = RY(params[i], qubits[i]);\n    }\n    // Entangling layer\n    for i in 0..len(qubits)-1 {\n        (qubits[i], qubits[i+1]) = CNOT(qubits[i], qubits[i+1]);\n    }\n    return qubits;\n}",
+      "language": "silq",
+      "specification": {
+        "name": "vqe_spec",
+        "precondition": "in_basis(qubits, |0...0⟩)",
+        "postcondition": "parameterized_state(qubits, params)",
+        "invariants": ["unitary_evolution(qubits)"]
+      },
+      "description": "Variational Quantum Eigensolver ansatz layer",
+      "tags": ["variational", "vqe", "parameterized", "research"]
+    }
+  ]
+}

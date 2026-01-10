@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0",
+  "description": "Ground-truth specifications for QVerifyBench programs",
+  "specifications": {
+    "hadamard_single": {
+      "precondition": "in_basis(q, |0⟩)",
+      "postcondition": "superposition(q) ∧ prob(q, |0⟩) = 0.5 ∧ prob(q, |1⟩) = 0.5",
+      "invariants": []
+    },
+    "bell_state": {
+      "precondition": "in_basis(q0, |0⟩) ∧ in_basis(q1, |0⟩)",
+      "postcondition": "entangled(q0, q1) ∧ prob(q0q1, |00⟩) = 0.5 ∧ prob(q0q1, |11⟩) = 0.5",
+      "invariants": []
+    },
+    "grover_iteration": {
+      "precondition": "superposition(qubits) ∧ uniform_amplitude(qubits)",
+      "postcondition": "prob(qubits, marked) > prob_before(qubits, marked)",
+      "invariants": ["amplitude(marked) increases by O(1/√N) per iteration"]
+    },
+    "quantum_teleportation": {
+      "precondition": "arbitrary_state(psi) ∧ in_basis(alice, |0⟩) ∧ in_basis(bob, |0⟩)",
+      "postcondition": "state(bob) = original_state(psi)",
+      "invariants": []
+    },
+    "bit_flip_code": {
+      "precondition": "arbitrary_state(q) ∧ in_basis(a1, |0⟩) ∧ in_basis(a2, |0⟩)",
+      "postcondition": "encoded(q, a1, a2) ∧ corrects_single_bit_flip",
+      "invariants": []
+    }
+  }
+}

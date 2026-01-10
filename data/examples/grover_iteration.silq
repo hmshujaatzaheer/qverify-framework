@@ -1,0 +1,48 @@
+// Grover's Search Algorithm - Single Iteration
+// Amplifies the amplitude of marked states
+
+def grover_iteration(qubits: qubit[], oracle: qubit[] -> qubit[]) -> qubit[] {
+    // Step 1: Apply the oracle
+    // Oracle marks the target state by flipping its phase
+    qubits = oracle(qubits);
+    
+    // Step 2: Apply the diffusion operator (Grover's diffuser)
+    // This amplifies the amplitude of marked states
+    
+    // 2a: Apply Hadamard to all qubits
+    qubits = hadamard_all(qubits);
+    
+    // 2b: Apply conditional phase flip (flip phase of |0...0⟩)
+    qubits = phase_flip_zero(qubits);
+    
+    // 2c: Apply Hadamard to all qubits again
+    qubits = hadamard_all(qubits);
+    
+    return qubits;
+}
+
+// Helper: Apply Hadamard to all qubits
+def hadamard_all(qubits: qubit[]) -> qubit[] {
+    for i in 0..len(qubits) {
+        qubits[i] = H(qubits[i]);
+    }
+    return qubits;
+}
+
+// Helper: Flip phase of |0...0⟩ state
+def phase_flip_zero(qubits: qubit[]) -> qubit[] {
+    // Apply X to all, then multi-controlled Z, then X again
+    for i in 0..len(qubits) {
+        qubits[i] = X(qubits[i]);
+    }
+    qubits = multi_controlled_z(qubits);
+    for i in 0..len(qubits) {
+        qubits[i] = X(qubits[i]);
+    }
+    return qubits;
+}
+
+// Specification:
+// Pre:  superposition(qubits)
+// Post: prob(qubits, marked) >= prob_before
+// Inv:  amplitude_of_marked_increases_each_iteration

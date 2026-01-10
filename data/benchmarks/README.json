@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "description": "QVerifyBench benchmark programs - Tier breakdown",
+  "statistics": {
+    "T1": {"count": 150, "description": "Basic single-qubit operations"},
+    "T2": {"count": 150, "description": "Multi-qubit entanglement"},
+    "T3": {"count": 100, "description": "Loops and oracles"},
+    "T4": {"count": 75, "description": "Error correction"},
+    "T5": {"count": 25, "description": "Research-level algorithms"}
+  },
+  "total_programs": 500
+}
