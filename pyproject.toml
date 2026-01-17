@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qverify"
+version = "0.1.0"
+description = "LLM-Assisted Formal Verification of Quantum Programs"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "H M Shujaat Zaheer", email = "shujabis@gmail.com"}]
+keywords = ["quantum computing", "formal verification", "LLM"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "pytest-cov>=4.0"]
+
+[project.urls]
+Homepage = "https://github.com/hmshujaatzaheer/qverify-framework"
+Repository = "https://github.com/hmshujaatzaheer/qverify-framework.git"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"qverify.benchmark.programs" = ["*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
